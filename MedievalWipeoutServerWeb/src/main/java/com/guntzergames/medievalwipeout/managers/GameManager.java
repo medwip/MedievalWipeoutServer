@@ -7,6 +7,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import com.guntzergames.medievalwipeout.beans.Account;
@@ -14,6 +15,8 @@ import com.guntzergames.medievalwipeout.beans.DeckTemplate;
 import com.guntzergames.medievalwipeout.beans.Game;
 import com.guntzergames.medievalwipeout.beans.GameEvent.PlayerType;
 import com.guntzergames.medievalwipeout.beans.GameEventDeckCard;
+import com.guntzergames.medievalwipeout.beans.GameEventIncreaseDecrease;
+import com.guntzergames.medievalwipeout.beans.GameEventIncreaseDecrease.Target;
 import com.guntzergames.medievalwipeout.beans.GameEventPlayCard;
 import com.guntzergames.medievalwipeout.beans.GameEventPlayCard.EventType;
 import com.guntzergames.medievalwipeout.beans.GameEventResourceCard;
@@ -145,8 +148,8 @@ public class GameManager {
 	private PlayerDeckCard drawPlayerDeckInternal(Player player) {
 
 		PlayerDeck playerDeck = player.getPlayerDeck();
-		LOGGER.debug("Here, playerDeck=" + playerDeck.getCards().size());
-		LOGGER.debug("Here, player.getInitialPlayerDeck()=" + player.getInitialPlayerDeck().getCards().size());
+		LOGGER.info("Here, playerDeck=" + playerDeck.getCards().size());
+		LOGGER.info("Here, player.getInitialPlayerDeck()=" + player.getInitialPlayerDeck().getCards().size());
 
 		if (playerDeck.getCards().size() == 0) {
 			playerDeck.getCards().addAll(player.getInitialPlayerDeck().getCards());
@@ -157,6 +160,9 @@ public class GameManager {
 	}
 
 	private ResourceDeckCard drawResourceDeck(Game game) {
+
+		LOGGER.debug(String.format("Initial resource deck size: %s", game.getInitialResourceDeck().getCards().size()));
+		LOGGER.debug(String.format("Resource deck size: %s", game.getResourceDeck().getCards().size()));
 
 		if (game.getResourceDeck().getCards().size() == 0) {
 			game.getResourceDeck().getCards().addAll(game.getInitialResourceDeck().getCards());
@@ -180,30 +186,29 @@ public class GameManager {
 		playCard(player, null, 1, null, -1);
 
 	}
-	
+
 	private void resolveBotDeckDraw(Player player) throws GameException {
-		
+
 		LOGGER.info("Deck draw for bot");
 		playCard(player, null, 1, null, -1);
-		
+
 	}
 
 	private void resolveBotResourceSelect(Player player) throws GameException {
-		
+
 		LOGGER.info("Resource select for bot");
 		Game game = player.getGame();
-		
+
 		int sourceCardId = CommonConstants.GAME_RESOURCE_FAITH;
-		
-		if ( game.getTrade() > 0 ) {
+
+		if (game.getTrade() > 0) {
 			sourceCardId = CommonConstants.GAME_RESOURCE_TRADE;
-		}
-		else if ( game.getDefense() > 0 ) {
+		} else if (game.getDefense() > 0) {
 			sourceCardId = CommonConstants.GAME_RESOURCE_DEFENSE;
 		}
-		
+
 		playCard(player, null, sourceCardId, null, -1);
-		
+
 	}
 
 	/*
@@ -237,102 +242,110 @@ public class GameManager {
 
 	public Game nextPhase(long gameId) throws GameException {
 
-		Game game = getGame(gameId);
-		Player activePlayer = game.getActivePlayer();
+		try {
 
-		LOGGER.debug(String.format("Enterring nextPhase : %s", game));
+			Game game = getGame(gameId);
+			Player activePlayer = game.getActivePlayer();
 
-		boolean triggerNextPhase = false;
+			LOGGER.debug(String.format("Enterring nextPhase : %s", game));
 
-		switch (game.getPhase()) {
+			boolean triggerNextPhase = false;
 
-			case BEFORE_RESOURCE_CHOOSE:
-				resolveBeforeResourceDraw(activePlayer);
-				game.setResourceCard1(drawResourceDeck(game));
-				game.getResourceCard1().setId(1);
-				game.setResourceCard2(drawResourceDeck(game));
-				game.getResourceCard2().setId(2);
-				game.setPhase(Phase.DURING_RESOURCE_CHOOSE);
-				if (activePlayer.getAccount().isBot()) {
-					resolveBotResourceChoose(activePlayer);
-				}
-				break;
+			switch (game.getPhase()) {
 
-			case DURING_RESOURCE_CHOOSE:
-				game.setPhase(Phase.AFTER_RESOURCE_CHOOSE);
-				triggerNextPhase = true;
-				break;
+				case BEFORE_RESOURCE_CHOOSE:
+					resolveBeforeResourceDraw(activePlayer);
+					game.setResourceCard1(drawResourceDeck(game));
+					game.getResourceCard1().setId(1);
+					game.setResourceCard2(drawResourceDeck(game));
+					game.getResourceCard2().setId(2);
+					game.setPhase(Phase.DURING_RESOURCE_CHOOSE);
+					if (activePlayer.getAccount().isBot()) {
+						resolveBotResourceChoose(activePlayer);
+					}
+					break;
 
-			case AFTER_RESOURCE_CHOOSE:
-				game.setPhase(Phase.BEFORE_DECK_DRAW);
-				triggerNextPhase = true;
-				break;
+				case DURING_RESOURCE_CHOOSE:
+					game.setPhase(Phase.AFTER_RESOURCE_CHOOSE);
+					triggerNextPhase = true;
+					break;
 
-			case BEFORE_DECK_DRAW:
-				drawPlayerDeck(game.getActivePlayer());
-				game.setPhase(Phase.DURING_DECK_DRAW);
-				if (activePlayer.getAccount().isBot()) {
-					resolveBotDeckDraw(activePlayer);
-				}
-				break;
+				case AFTER_RESOURCE_CHOOSE:
+					game.setPhase(Phase.BEFORE_DECK_DRAW);
+					triggerNextPhase = true;
+					break;
 
-			case DURING_DECK_DRAW:
-				game.setPhase(Phase.AFTER_DECK_DRAW);
-				triggerNextPhase = true;
-				break;
+				case BEFORE_DECK_DRAW:
+					drawPlayerDeck(game.getActivePlayer());
+					game.setPhase(Phase.DURING_DECK_DRAW);
+					if (activePlayer.getAccount().isBot()) {
+						resolveBotDeckDraw(activePlayer);
+					}
+					break;
 
-			case AFTER_DECK_DRAW:
-				game.setPhase(Phase.BEFORE_RESOURCE_SELECT);
-				triggerNextPhase = true;
-				break;
+				case DURING_DECK_DRAW:
+					game.setPhase(Phase.AFTER_DECK_DRAW);
+					triggerNextPhase = true;
+					break;
 
-			case BEFORE_RESOURCE_SELECT:
-				game.setPhase(Phase.DURING_RESOURCE_SELECT);
-				if (activePlayer.getAccount().isBot()) {
-					resolveBotResourceSelect(activePlayer);
-				}
-				break;
+				case AFTER_DECK_DRAW:
+					game.setPhase(Phase.BEFORE_RESOURCE_SELECT);
+					triggerNextPhase = true;
+					break;
 
-			case DURING_RESOURCE_SELECT:
-				game.setPhase(Phase.AFTER_RESOURCE_SELECT);
-				triggerNextPhase = true;
-				break;
+				case BEFORE_RESOURCE_SELECT:
+					game.setPhase(Phase.DURING_RESOURCE_SELECT);
+					if (activePlayer.getAccount().isBot()) {
+						resolveBotResourceSelect(activePlayer);
+					}
+					break;
 
-			case AFTER_RESOURCE_SELECT:
-				game.setPhase(Phase.BEFORE_PLAY);
-				triggerNextPhase = true;
-				break;
+				case DURING_RESOURCE_SELECT:
+					game.setPhase(Phase.AFTER_RESOURCE_SELECT);
+					triggerNextPhase = true;
+					break;
 
-			case BEFORE_PLAY:
-				game.setPhase(Phase.DURING_PLAY);
-				break;
+				case AFTER_RESOURCE_SELECT:
+					game.setPhase(Phase.BEFORE_PLAY);
+					triggerNextPhase = true;
+					break;
 
-			case DURING_PLAY:
-				game.setPhase(Phase.AFTER_PLAY);
-				triggerNextPhase = true;
-				break;
+				case BEFORE_PLAY:
+					game.setPhase(Phase.DURING_PLAY);
+					break;
 
-			case AFTER_PLAY:
-				game.setPhase(Phase.BEFORE_RESOURCE_CHOOSE);
-				game.nextTurn();
-				triggerNextPhase = true;
-				break;
+				case DURING_PLAY:
+					game.setPhase(Phase.AFTER_PLAY);
+					triggerNextPhase = true;
+					break;
 
-			default:
-				break;
+				case AFTER_PLAY:
+					game.setPhase(Phase.BEFORE_RESOURCE_CHOOSE);
+					game.nextTurn();
+					triggerNextPhase = true;
+					break;
 
+				default:
+					break;
+
+			}
+
+			// Save game state in the database
+			game = gameDao.saveGame(game);
+
+			LOGGER.debug(String.format("Leaving nextPhase: %s", game));
+
+			if (triggerNextPhase) {
+				nextPhase(gameId);
+			}
+
+			return game;
+
+		} catch (Exception e) {
+			LOGGER.log(Level.ERROR, " ==> Unexpected error occured in nextPhase()", e);
+			e.printStackTrace(System.out);
+			throw new GameException("Unexpected error occured in nextPhase()", e);
 		}
-
-		// Save game state in the database
-		game = gameDao.saveGame(game);
-
-		LOGGER.debug(String.format("Leaving nextPhase: %s", game));
-
-		if (triggerNextPhase) {
-			nextPhase(gameId);
-		}
-
-		return game;
 
 	}
 
@@ -370,9 +383,9 @@ public class GameManager {
 	public Game playCard(String facebookUserId, long gameId, String sourceLayout, int sourceCardId, String destinationLayout, int destinationCardId) throws GameException {
 
 		Game game = getGame(gameId);
-		
+
 		LOGGER.debug("Enterring playCard, game=" + game);
-		
+
 		Player player = selectPlayer(game, facebookUserId);
 		List<Player> opponents = game.selectOpponents(player);
 		// TODO
@@ -462,9 +475,26 @@ public class GameManager {
 						playerEvent.setEventType(EventType.ATTACK_DEFENSE_FIELD);
 						if (opponent.getCurrentDefense() > sourceCard.getAttack()) {
 							opponent.removeCurrentDefense(sourceCard.getAttack());
+							GameEventIncreaseDecrease increaseDecreaseEvent = new GameEventIncreaseDecrease();
+							increaseDecreaseEvent.setPlayerType(PlayerType.OPPONENT);
+							increaseDecreaseEvent.setTarget(Target.PLAYER_CURRENT_DEFENSE);
+							increaseDecreaseEvent.setQuantity(sourceCard.getAttack());
+							player.getEvents().add(increaseDecreaseEvent);
+							// TODO: do it for opponent
 						} else {
 							opponent.removeLifePoints(sourceCard.getAttack() - opponent.getCurrentDefense());
 							opponent.setCurrentDefense(0);
+							GameEventIncreaseDecrease increaseDecreaseEventDefense = new GameEventIncreaseDecrease();
+							increaseDecreaseEventDefense.setPlayerType(PlayerType.OPPONENT);
+							increaseDecreaseEventDefense.setTarget(Target.PLAYER_CURRENT_DEFENSE);
+							increaseDecreaseEventDefense.setQuantity(sourceCard.getAttack());
+							player.getEvents().add(increaseDecreaseEventDefense);
+							GameEventIncreaseDecrease increaseDecreaseEventLifePoints = new GameEventIncreaseDecrease();
+							increaseDecreaseEventLifePoints.setPlayerType(PlayerType.OPPONENT);
+							increaseDecreaseEventLifePoints.setTarget(Target.PLAYER_LIFE_POINTS);
+							increaseDecreaseEventLifePoints.setQuantity(sourceCard.getAttack() - opponent.getCurrentDefense());
+							player.getEvents().add(increaseDecreaseEventLifePoints);
+							// TODO: do it for opponent
 						}
 					}
 
@@ -508,7 +538,7 @@ public class GameManager {
 				throw new UnsupportedPhaseException(String.format("Unsupported phase: %s", game.getPhase()));
 
 		}
-		
+
 		LOGGER.debug("Leaving playCard, game=" + game);
 
 		return game;
@@ -576,11 +606,7 @@ public class GameManager {
 
 		// If nextPhaseDelay has been activated (by a bot) since a sufficient
 		// delay, launch the next phase
-		if ( game.isNextPhaseDelayActivated() && 
-				( (((new Date()).getTime()) - game.getNextPhaseTimestamp()) 
-						> CommonConstants.BOT_PHASE_DURATION
-				)
-		) {
+		if (game.isNextPhaseDelayActivated() && ((((new Date()).getTime()) - game.getNextPhaseTimestamp()) > CommonConstants.BOT_PHASE_DURATION)) {
 			LOGGER.info(String.format("Next phase delay activated: timeStamp=%s, now=%s", new Date(game.getNextPhaseTimestamp()), new Date()));
 			game.setNextPhaseDelayActivated(false);
 			game = nextPhase(gameId);
