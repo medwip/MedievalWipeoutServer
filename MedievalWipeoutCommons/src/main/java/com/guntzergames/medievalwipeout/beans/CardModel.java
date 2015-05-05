@@ -62,6 +62,9 @@ public class CardModel implements Comparable<CardModel> {
 	@Column(name = "FAITH_COST")
 	private int faithCost;
 
+	@Column(name = "ALCHEMY_COST")
+	private int alchemyCost;
+
 	@Column(name = "DEFENSOR")
 	private boolean defensor;
 
@@ -125,6 +128,14 @@ public class CardModel implements Comparable<CardModel> {
 
 	public void setFaithCost(int faithCost) {
 		this.faithCost = faithCost;
+	}
+
+	public int getAlchemyCost() {
+		return alchemyCost;
+	}
+
+	public void setAlchemyCost(int alchemyCost) {
+		this.alchemyCost = alchemyCost;
 	}
 
 	public boolean isDefensor() {
