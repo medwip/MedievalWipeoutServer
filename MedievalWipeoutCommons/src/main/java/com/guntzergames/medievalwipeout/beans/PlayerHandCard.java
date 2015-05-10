@@ -36,6 +36,7 @@ public class PlayerHandCard extends PlayerDeckCard {
 				goldCost, faithCost, player.getGold(), player.getFaith()));
 		if ( player.getGold() >= goldCost 
 			&& player.getFaith() >= faithCost
+			&& player.getAlchemy() >= alchemyCost
 		) {
 			playable = true;
 		}

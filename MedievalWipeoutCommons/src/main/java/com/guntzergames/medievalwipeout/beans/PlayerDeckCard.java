@@ -12,16 +12,13 @@ public class PlayerDeckCard extends AbstractCard {
 	protected DeckTemplate deckTemplate;
 	
 	protected String drawableResourceName;
-	
 	protected String name;
 	
 	protected int attack;
-	
 	protected int lifePoints;
-	
 	protected int goldCost;
-	
 	protected int faithCost;
+	protected int alchemyCost;
 	
 	protected boolean archer, defensor;
 
@@ -45,6 +42,7 @@ public class PlayerDeckCard extends AbstractCard {
 		this.name = model.getName();
 		this.goldCost = model.getGoldCost();
 		this.faithCost = model.getFaithCost();
+		this.alchemyCost = model.getAlchemyCost();
 		this.archer = model.isArcher();
 		this.defensor = model.isDefensor();
 	}
@@ -57,6 +55,7 @@ public class PlayerDeckCard extends AbstractCard {
 		this.name = playerDeckCard.getName();
 		this.goldCost = playerDeckCard.getGoldCost();
 		this.faithCost = playerDeckCard.getFaithCost();
+		this.alchemyCost = playerDeckCard.getAlchemyCost();
 		this.archer = playerDeckCard.isArcher();
 		this.defensor = playerDeckCard.isDefensor();
 	}
@@ -115,6 +114,14 @@ public class PlayerDeckCard extends AbstractCard {
 
 	public void setFaithCost(int faithCost) {
 		this.faithCost = faithCost;
+	}
+
+	public int getAlchemyCost() {
+		return alchemyCost;
+	}
+
+	public void setAlchemyCost(int alchemyCost) {
+		this.alchemyCost = alchemyCost;
 	}
 
 	public boolean isArcher() {

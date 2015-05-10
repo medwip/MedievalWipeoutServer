@@ -31,7 +31,7 @@ public class GameView {
 	private PlayerHand playerHand;
 	private PlayerField playerFieldAttack, playerFieldDefense;
 	
-	private int gold, trade, defense, faith, turn;
+	private int gold, trade, defense, faith, alchemy, turn;
 	
 	private Phase phase;
 	private GameState gameState;
@@ -126,6 +126,14 @@ public class GameView {
 
 	public void setFaith(int faith) {
 		this.faith = faith;
+	}
+
+	public int getAlchemy() {
+		return alchemy;
+	}
+
+	public void setAlchemy(int alchemy) {
+		this.alchemy = alchemy;
 	}
 
 	public int getTurn() {

@@ -125,17 +125,19 @@ public class GameManager {
 		}
 
 		ResourceDeck initialResourceDeck = game.getInitialResourceDeck();
-		initialResourceDeck.addCard(new ResourceDeckCard(3, 0, 0));
-		initialResourceDeck.addCard(new ResourceDeckCard(2, 1, 0));
-		initialResourceDeck.addCard(new ResourceDeckCard(3, 0, 0));
-		initialResourceDeck.addCard(new ResourceDeckCard(0, 0, 1));
-		initialResourceDeck.addCard(new ResourceDeckCard(3, 0, 0));
-		initialResourceDeck.addCard(new ResourceDeckCard(0, 3, 0));
-		initialResourceDeck.addCard(new ResourceDeckCard(1, 2, 0));
-		initialResourceDeck.addCard(new ResourceDeckCard(1, 2, 0));
-		initialResourceDeck.addCard(new ResourceDeckCard(0, 0, 1));
-		initialResourceDeck.addCard(new ResourceDeckCard(0, 3, 0));
-		initialResourceDeck.addCard(new ResourceDeckCard(0, 0, 1));
+		initialResourceDeck.addCard(new ResourceDeckCard(3, 0, 0, 0));
+		initialResourceDeck.addCard(new ResourceDeckCard(2, 1, 0, 0));
+		initialResourceDeck.addCard(new ResourceDeckCard(3, 0, 0, 0));
+		initialResourceDeck.addCard(new ResourceDeckCard(0, 0, 1, 0));
+		initialResourceDeck.addCard(new ResourceDeckCard(0, 0, 0, 1));
+		initialResourceDeck.addCard(new ResourceDeckCard(3, 0, 0, 0));
+		initialResourceDeck.addCard(new ResourceDeckCard(0, 3, 0, 0));
+		initialResourceDeck.addCard(new ResourceDeckCard(1, 2, 0, 0));
+		initialResourceDeck.addCard(new ResourceDeckCard(1, 2, 0, 0));
+		initialResourceDeck.addCard(new ResourceDeckCard(0, 0, 1, 0));
+		initialResourceDeck.addCard(new ResourceDeckCard(0, 0, 0, 1));
+		initialResourceDeck.addCard(new ResourceDeckCard(0, 3, 0, 0));
+		initialResourceDeck.addCard(new ResourceDeckCard(0, 0, 1, 0));
 		Collections.shuffle(initialResourceDeck.getCards());
 		game.getResourceDeck().getCards().addAll(initialResourceDeck.getCards());
 		game.setTurn(1);
@@ -431,6 +433,10 @@ public class GameManager {
 					player.addFaith(game.getFaith());
 					game.setFaith(0);
 				}
+				if (sourceCardId == CommonConstants.GAME_RESOURCE_ALCHEMY) {
+					player.addAlchemy(game.getAlchemy());
+					game.setAlchemy(0);
+				}
 				game = triggerNextPhase(player);
 				break;
 
@@ -510,13 +516,25 @@ public class GameManager {
 							throw new GameException(String.format("Unknown destination layout: %s", destinationLayout));
 						}
 						destinationCard = destinationField.getCards().get(destinationCardId);
-						if (destinationCard.getCurrentLifePoints() > sourceCard.getAttack()) {
-							destinationCard.removeCurrentLifePoints(sourceCard.getAttack());
-						} else {
-							opponent.removeLifePoints(sourceCard.getAttack() - opponent.getCurrentDefense());
-							destinationCard.setCurrentLifePoints(0);
+						
+						destinationCard.removeCurrentLifePoints(sourceCard.getAttack());
+						
+						// The attacked card is not dead: Retaliation if this is not an archer and
+						// if the attack card is not an archer
+						if ( destinationCard.getCurrentLifePoints() > 0 ) {
+							if ( !sourceCard.isArcher() && !destinationCard.isArcher() ) {
+								sourceCard.removeCurrentLifePoints(destinationCard.getAttack());
+							}
+						}
+						
+						// Remove cards if 0 life points
+						if ( destinationCard.getCurrentLifePoints() == 0 ) {
 							destinationField.getCards().remove(destinationCardId);
 						}
+						if ( sourceCard.getCurrentLifePoints() == 0 ) {
+							playerField.getCards().remove(sourceCardId);
+						}
+						
 						playerEvent.setDestination(destinationCard);
 						playerEvent.setDestinationIndex(destinationCardId);
 					}

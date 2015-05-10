@@ -69,6 +69,8 @@ public class Player {
 	private int currentDefense;
 	@Transient
 	private int faith;
+	@Transient
+	private int alchemy;
 
 	@JsonIgnore
 	public Account getAccount() {
@@ -217,6 +219,18 @@ public class Player {
 
 	public void addFaith(int faith) {
 		this.faith += faith;
+	}
+
+	public int getAlchemy() {
+		return alchemy;
+	}
+
+	public void setAlchemy(int alchemy) {
+		this.alchemy = alchemy;
+	}
+
+	public void addAlchemy(int alchemy) {
+		this.alchemy += alchemy;
 	}
 
 	public PlayerDeckCard getPlayerDeckCard1() {

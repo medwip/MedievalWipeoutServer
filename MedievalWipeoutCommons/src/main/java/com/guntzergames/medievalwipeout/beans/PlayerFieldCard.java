@@ -40,6 +40,9 @@ public class PlayerFieldCard extends PlayerDeckCard {
 	
 	public void removeCurrentLifePoints(int lifePoints) {
 		currentLifePoints -= lifePoints;
+		if ( currentLifePoints < 0 ) {
+			currentLifePoints = 0;
+		}
 	}
 
 	public void setCurrentLifePoints(int currentLifePoints) {

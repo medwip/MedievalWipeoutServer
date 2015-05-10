@@ -86,6 +86,8 @@ public class Game {
 	private int defense;
 	@Transient
 	private int faith;
+	@Transient
+	private int alchemy;
 	
 	@Transient
 	private boolean nextPhaseDelayActivated;
@@ -299,6 +301,7 @@ public class Game {
 		gameView.setTrade(trade);
 		gameView.setDefense(defense);
 		gameView.setFaith(faith);
+		gameView.setAlchemy(alchemy);
 
 		return gameView;
 
@@ -390,6 +393,18 @@ public class Game {
 		this.faith += faith;
 	}
 	
+	public int getAlchemy() {
+		return alchemy;
+	}
+
+	public void setAlchemy(int alchemy) {
+		this.alchemy = alchemy;
+	}
+	
+	public void addAlchemy(int alchemy) {
+		this.alchemy += alchemy;
+	}
+
 	public void setTransientFields(Game model) {
 		
 		setTurn(model.getTurn());
