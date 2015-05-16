@@ -3,6 +3,7 @@ C:\dev\workspace\MedievalWipeoutServer\MedievalWipeoutCommons\src\main\java\com\
 C:\dev\workspace\MedievalWipeoutServer\MedievalWipeoutCommons\src\main\java\com\guntzergames\medievalwipeout\beans\GameEventDeckCard.java
 C:\dev\workspace\MedievalWipeoutServer\MedievalWipeoutCommons\src\main\java\com\guntzergames\medievalwipeout\beans\ResourceDeck.java
 C:\dev\workspace\MedievalWipeoutServer\MedievalWipeoutCommons\src\main\java\com\guntzergames\medievalwipeout\beans\CardModel.java
+C:\dev\workspace\MedievalWipeoutServer\MedievalWipeoutCommons\src\main\java\com\guntzergames\medievalwipeout\exceptions\UnknownSkillException.java
 C:\dev\workspace\MedievalWipeoutServer\MedievalWipeoutCommons\src\main\java\com\guntzergames\medievalwipeout\interfaces\ICard.java
 C:\dev\workspace\MedievalWipeoutServer\MedievalWipeoutCommons\src\main\java\com\guntzergames\medievalwipeout\beans\CardModelList.java
 C:\dev\workspace\MedievalWipeoutServer\MedievalWipeoutCommons\src\main\java\com\guntzergames\medievalwipeout\exceptions\GameException.java
@@ -28,12 +29,14 @@ C:\dev\workspace\MedievalWipeoutServer\MedievalWipeoutCommons\src\main\java\com\
 C:\dev\workspace\MedievalWipeoutServer\MedievalWipeoutCommons\src\main\java\com\guntzergames\medievalwipeout\beans\DeckTemplateElement.java
 C:\dev\workspace\MedievalWipeoutServer\MedievalWipeoutCommons\src\main\java\com\guntzergames\medievalwipeout\beans\Player.java
 C:\dev\workspace\MedievalWipeoutServer\MedievalWipeoutCommons\src\main\java\com\guntzergames\medievalwipeout\beans\PlayerDeckCard.java
+C:\dev\workspace\MedievalWipeoutServer\MedievalWipeoutCommons\src\main\java\com\guntzergames\medievalwipeout\beans\Skill.java
 C:\dev\workspace\MedievalWipeoutServer\MedievalWipeoutCommons\src\main\java\com\guntzergames\medievalwipeout\enums\CardLocation.java
 C:\dev\workspace\MedievalWipeoutServer\MedievalWipeoutCommons\src\main\java\com\guntzergames\medievalwipeout\beans\DeckTemplate.java
 C:\dev\workspace\MedievalWipeoutServer\MedievalWipeoutCommons\src\main\java\com\guntzergames\medievalwipeout\abstracts\AbstractCardList.java
 C:\dev\workspace\MedievalWipeoutServer\MedievalWipeoutCommons\src\main\java\com\guntzergames\medievalwipeout\beans\Packet.java
 C:\dev\workspace\MedievalWipeoutServer\MedievalWipeoutCommons\src\main\java\com\guntzergames\medievalwipeout\beans\PlayerDiscard.java
 C:\dev\workspace\MedievalWipeoutServer\MedievalWipeoutCommons\src\main\java\com\guntzergames\medievalwipeout\exceptions\PlayerNotInGameException.java
+C:\dev\workspace\MedievalWipeoutServer\MedievalWipeoutCommons\src\main\java\com\guntzergames\medievalwipeout\enums\SkillPhase.java
 C:\dev\workspace\MedievalWipeoutServer\MedievalWipeoutCommons\src\main\java\com\guntzergames\medievalwipeout\beans\Account.java
 C:\dev\workspace\MedievalWipeoutServer\MedievalWipeoutCommons\src\main\java\com\guntzergames\medievalwipeout\enums\GameEventType.java
 C:\dev\workspace\MedievalWipeoutServer\MedievalWipeoutCommons\src\main\java\com\guntzergames\medievalwipeout\views\GameView.java

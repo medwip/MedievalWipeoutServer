@@ -15,6 +15,7 @@ http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
 		<class>com.guntzergames.medievalwipeout.beans.Game</class>
 		<class>com.guntzergames.medievalwipeout.beans.Player</class>
 		<class>com.guntzergames.medievalwipeout.beans.PlayerDeckCard</class>
+		<class>com.guntzergames.medievalwipeout.beans.Skill</class>
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
 			<property name="hibernate.show_sql" value="true" />

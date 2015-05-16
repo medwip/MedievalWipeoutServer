@@ -1,6 +1,8 @@
 package com.guntzergames.medievalwipeout.beans;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -19,30 +21,31 @@ import javax.persistence.Transient;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+import com.guntzergames.medievalwipeout.enums.Phase;
+import com.guntzergames.medievalwipeout.enums.SkillPhase;
+
 @Entity
 @Table(name = "PLAYER")
-@NamedQueries({
-	@NamedQuery(name = Player.NQ_FIND_BY_ACCOUNT, query = "SELECT p FROM Player p WHERE p.deckTemplate.account = :account"),
-})
+@NamedQueries({ @NamedQuery(name = Player.NQ_FIND_BY_ACCOUNT, query = "SELECT p FROM Player p WHERE p.deckTemplate.account = :account"), })
 public class Player {
 
 	public final static String NQ_FIND_BY_ACCOUNT = "NQ_FIND_PLAYERS_BY_ACCOUNT";
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
 	@Column(name = "ID")
 	private long id;
-	
+
 	@ManyToOne(targetEntity = DeckTemplate.class)
 	@JoinColumn(name = "DECK_TEMPLATE_KEY")
 	private DeckTemplate deckTemplate;
-	
+
 	@JsonIgnore
-	@ManyToOne(targetEntity = Game.class, fetch=FetchType.LAZY, cascade=CascadeType.REFRESH)
+	@ManyToOne(targetEntity = Game.class, fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	@JoinColumn(name = "GAME_KEY")
 	private Game game;
-	
+
 	@Transient
 	private PlayerDeck playerDeck = new PlayerDeck();
 	@Transient
@@ -124,7 +127,7 @@ public class Player {
 	public void setPlayerDiscard(PlayerDiscard discard) {
 		this.playerDiscard = discard;
 	}
-	
+
 	public DeckTemplate getDeckTemplate() {
 		return deckTemplate;
 	}
@@ -197,6 +200,13 @@ public class Player {
 		this.gold += gold;
 	}
 
+	public void removeGold(int gold) {
+		this.gold -= gold;
+		if (gold < 0) {
+			gold = 0;
+		}
+	}
+
 	public int getCurrentDefense() {
 		return currentDefense;
 	}
@@ -204,7 +214,7 @@ public class Player {
 	public void setCurrentDefense(int currentDefense) {
 		this.currentDefense = currentDefense;
 	}
-	
+
 	public void removeCurrentDefense(int currentDefense) {
 		this.currentDefense -= currentDefense;
 	}
@@ -248,11 +258,11 @@ public class Player {
 	public void setPlayerDeckCard2(PlayerDeckCard playerDeckCard2) {
 		this.playerDeckCard2 = playerDeckCard2;
 	}
-	
+
 	public LinkedList<GameEvent> getEvents() {
 		return events;
 	}
-	
+
 	public boolean hasSameAccount(Player player) {
 		return player != null && getAccount().getFacebookUserId().equals(player.getAccount().getFacebookUserId());
 	}
@@ -260,9 +270,29 @@ public class Player {
 	public void setEvents(LinkedList<GameEvent> events) {
 		this.events = events;
 	}
-	
-	public void setTransientFields(Player model) {
+
+	public List<Skill> getSkills(Phase phase, SkillPhase skillPhase) {
 		
+		List<Skill> skills = new ArrayList<Skill>();
+
+		for (PlayerDeckCard playerDeckCard : getPlayerFieldAttack().getCards()) {
+
+			for (Skill skill : playerDeckCard.getSkills()) {
+
+				if (skill.getPhase() == phase && skill.getSkillPhase() == skillPhase) {
+					skills.add(skill);
+				}
+
+			}
+
+		}
+		
+		return skills;
+		
+	}
+
+	public void setTransientFields(Player model) {
+
 		setPlayerDeck(model.getPlayerDeck());
 		setInitialPlayerDeck(model.getInitialPlayerDeck());
 		setPlayerHand(model.getPlayerHand());
@@ -277,25 +307,25 @@ public class Player {
 		setDefense(model.getDefense());
 		setCurrentDefense(model.getCurrentDefense());
 		setFaith(model.getFaith());
-		
+
 	}
 
 	public void updatePlayableHandCards() {
-		for ( PlayerHandCard card : getPlayerHand().getCards() ) {
+		for (PlayerHandCard card : getPlayerHand().getCards()) {
 			card.setPlayableFromPlayer(this);
 		}
 	}
-	
+
 	public void adjustResources() {
-		
+
 		gold += trade;
 		currentDefense = defense;
-		
+
 	}
-	
+
 	@Override
 	public String toString() {
 		return String.format("Id: %s, account: %s", id, getAccount() != null ? getAccount().getFacebookUserId() : "null");
 	}
-	
+
 }

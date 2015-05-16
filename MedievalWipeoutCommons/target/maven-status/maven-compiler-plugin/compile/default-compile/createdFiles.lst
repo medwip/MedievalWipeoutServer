@@ -30,14 +30,17 @@ com\guntzergames\medievalwipeout\utils\JsonUtils.class
 com\guntzergames\medievalwipeout\beans\GameViewList.class
 com\guntzergames\medievalwipeout\beans\PlayerField.class
 com\guntzergames\medievalwipeout\beans\GameEventResourceCard.class
+com\guntzergames\medievalwipeout\exceptions\UnknownSkillException.class
 com\guntzergames\medievalwipeout\beans\GameEventIncreaseDecrease$Target.class
 com\guntzergames\medievalwipeout\utils\VersionUtils.class
 com\guntzergames\medievalwipeout\beans\PlayerDeck.class
 com\guntzergames\medievalwipeout\interfaces\CommonConstants.class
 com\guntzergames\medievalwipeout\beans\DeckTemplateElement.class
 com\guntzergames\medievalwipeout\beans\Account.class
+com\guntzergames\medievalwipeout\enums\SkillPhase.class
 com\guntzergames\medievalwipeout\interfaces\ICard.class
 com\guntzergames\medievalwipeout\beans\PlayerDeckCard.class
 com\guntzergames\medievalwipeout\beans\Game.class
 com\guntzergames\medievalwipeout\beans\CollectionElement.class
+com\guntzergames\medievalwipeout\beans\Skill.class
 com\guntzergames\medievalwipeout\beans\PlayerHand.class

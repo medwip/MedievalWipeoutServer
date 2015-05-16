@@ -1,5 +1,7 @@
 package com.guntzergames.medievalwipeout.beans;
 
+import java.util.List;
+
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 
@@ -19,6 +21,8 @@ public class PlayerDeckCard extends AbstractCard {
 	protected int goldCost;
 	protected int faithCost;
 	protected int alchemyCost;
+	
+	protected List<Skill> skills;
 	
 	protected boolean archer, defensor;
 
@@ -45,6 +49,7 @@ public class PlayerDeckCard extends AbstractCard {
 		this.alchemyCost = model.getAlchemyCost();
 		this.archer = model.isArcher();
 		this.defensor = model.isDefensor();
+		this.skills = model.getSkills();
 	}
 
 	public PlayerDeckCard(PlayerDeckCard playerDeckCard) {
@@ -58,6 +63,7 @@ public class PlayerDeckCard extends AbstractCard {
 		this.alchemyCost = playerDeckCard.getAlchemyCost();
 		this.archer = playerDeckCard.isArcher();
 		this.defensor = playerDeckCard.isDefensor();
+		this.skills = playerDeckCard.getSkills();
 	}
 
 	public DeckTemplate getDeckTemplate() {
@@ -138,6 +144,14 @@ public class PlayerDeckCard extends AbstractCard {
 
 	public void setDefensor(boolean defensor) {
 		this.defensor = defensor;
+	}
+
+	public List<Skill> getSkills() {
+		return skills;
+	}
+
+	public void setSkills(List<Skill> skills) {
+		this.skills = skills;
 	}
 
 	@Override

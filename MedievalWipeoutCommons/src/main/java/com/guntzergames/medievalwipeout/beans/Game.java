@@ -126,6 +126,13 @@ public class Game {
 		}
 		
 		return opponents;
+		
+	}
+	
+	public Player selectOpponent(Player player) throws PlayerNotInGameException {
+		
+		return selectOpponents(player).get(0);
+		
 	}
 
 	public Player selectPlayer(String userName) throws PlayerNotInGameException {

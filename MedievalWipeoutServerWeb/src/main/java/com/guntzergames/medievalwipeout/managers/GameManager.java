@@ -30,10 +30,13 @@ import com.guntzergames.medievalwipeout.beans.PlayerHand;
 import com.guntzergames.medievalwipeout.beans.PlayerHandCard;
 import com.guntzergames.medievalwipeout.beans.ResourceDeck;
 import com.guntzergames.medievalwipeout.beans.ResourceDeckCard;
+import com.guntzergames.medievalwipeout.beans.Skill;
 import com.guntzergames.medievalwipeout.enums.GameState;
 import com.guntzergames.medievalwipeout.enums.Phase;
+import com.guntzergames.medievalwipeout.enums.SkillPhase;
 import com.guntzergames.medievalwipeout.exceptions.GameException;
 import com.guntzergames.medievalwipeout.exceptions.PlayerNotInGameException;
+import com.guntzergames.medievalwipeout.exceptions.UnknownSkillException;
 import com.guntzergames.medievalwipeout.exceptions.UnsupportedPhaseException;
 import com.guntzergames.medievalwipeout.interfaces.CommonConstants;
 import com.guntzergames.medievalwipeout.persistence.AccountDao;
@@ -252,8 +255,11 @@ public class GameManager {
 			LOGGER.debug(String.format("Enterring nextPhase : %s", game));
 
 			boolean triggerNextPhase = false;
+			Phase gamePhase = game.getPhase();
 
-			switch (game.getPhase()) {
+			activateSKills(activePlayer, gamePhase, SkillPhase.PHASE_CHANGED);
+
+			switch (gamePhase) {
 
 				case BEFORE_RESOURCE_CHOOSE:
 					resolveBeforeResourceDraw(activePlayer);
@@ -347,6 +353,23 @@ public class GameManager {
 			LOGGER.log(Level.ERROR, " ==> Unexpected error occured in nextPhase()", e);
 			e.printStackTrace(System.out);
 			throw new GameException("Unexpected error occured in nextPhase()", e);
+		}
+
+	}
+
+	public void activateSKills(Player player, Phase phase, SkillPhase skillPhase) throws PlayerNotInGameException, UnknownSkillException {
+
+		Player opponent = player.getGame().selectOpponent(player);
+
+		for (Skill skill : player.getSkills(phase, skillPhase)) {
+
+			if (skill.getSkillCode() == "ROBE") {
+				opponent.removeGold(5);
+			}
+			else {
+				throw new UnknownSkillException(String.format("Unknown skill: %s", skill.getSkillCode()));
+			}
+
 		}
 
 	}
@@ -516,25 +539,26 @@ public class GameManager {
 							throw new GameException(String.format("Unknown destination layout: %s", destinationLayout));
 						}
 						destinationCard = destinationField.getCards().get(destinationCardId);
-						
+
 						destinationCard.removeCurrentLifePoints(sourceCard.getAttack());
-						
-						// The attacked card is not dead: Retaliation if this is not an archer and
+
+						// The attacked card is not dead: Retaliation if this is
+						// not an archer and
 						// if the attack card is not an archer
-						if ( destinationCard.getCurrentLifePoints() > 0 ) {
-							if ( !sourceCard.isArcher() && !destinationCard.isArcher() ) {
+						if (destinationCard.getCurrentLifePoints() > 0) {
+							if (!sourceCard.isArcher() && !destinationCard.isArcher()) {
 								sourceCard.removeCurrentLifePoints(destinationCard.getAttack());
 							}
 						}
-						
+
 						// Remove cards if 0 life points
-						if ( destinationCard.getCurrentLifePoints() == 0 ) {
+						if (destinationCard.getCurrentLifePoints() == 0) {
 							destinationField.getCards().remove(destinationCardId);
 						}
-						if ( sourceCard.getCurrentLifePoints() == 0 ) {
+						if (sourceCard.getCurrentLifePoints() == 0) {
 							playerField.getCards().remove(sourceCardId);
 						}
-						
+
 						playerEvent.setDestination(destinationCard);
 						playerEvent.setDestinationIndex(destinationCardId);
 					}

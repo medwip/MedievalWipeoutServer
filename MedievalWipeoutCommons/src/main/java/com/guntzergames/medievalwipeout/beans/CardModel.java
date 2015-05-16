@@ -1,11 +1,16 @@
 package com.guntzergames.medievalwipeout.beans;
 
+import java.util.List;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -13,7 +18,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "CARD_MODEL")
 @NamedQueries(
-{
+{ 
 	@NamedQuery(name = CardModel.NQ_FIND_ALL, query = "SELECT c FROM CardModel c"),
 	@NamedQuery(name = CardModel.NQ_FIND_BY_REQUIRED_LEVEL, query = "SELECT c FROM CardModel c WHERE c.requiredLevel <= :requiredLevel"),
 })
@@ -74,6 +79,14 @@ public class CardModel implements Comparable<CardModel> {
 	@Column(name = "REQUIRED_LEVEL")
 	private int requiredLevel;
 
+	@ManyToMany
+	@JoinTable(
+			name = "CARD_MODEL_SKILL", 
+			joinColumns = { @JoinColumn(name = "CARD_MODEL_KEY", referencedColumnName = "ID") }, 
+			inverseJoinColumns = { @JoinColumn(name = "SKILL_KEY", referencedColumnName = "ID") }
+	)
+	private List<Skill> skills;
+	
 	public int getId() {
 		return id;
 	}
@@ -161,14 +174,22 @@ public class CardModel implements Comparable<CardModel> {
 	public void setRequiredLevel(int requiredLevel) {
 		this.requiredLevel = requiredLevel;
 	}
-	
+
 	public int compareTo(CardModel o) {
-		return (new Integer(id)).compareTo(new Integer(((CardModel)o).getId()));
+		return (new Integer(id)).compareTo(new Integer(((CardModel) o).getId()));
+	}
+
+	public List<Skill> getSkills() {
+		return skills;
+	}
+
+	public void setSkills(List<Skill> skills) {
+		this.skills = skills;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		return (new Integer(id)).equals(new Integer(((CardModel)obj).getId()));
+		return (new Integer(id)).equals(new Integer(((CardModel) obj).getId()));
 	}
 
 	@Override
