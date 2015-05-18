@@ -90,7 +90,7 @@ public class GameResource {
 		Game game = gameManager.nextPhase(gameId);
 		Player player = gameManager.selectPlayer(game, facebookUserId);
 		String ret = buildGameView(player, game);
-		LOGGER.debug("nextPhase: JSON returned for next phase: " + ret);
+//		LOGGER.debug("nextPhase: JSON returned for next phase: " + ret);
         return ret;
 	}
 
@@ -102,7 +102,7 @@ public class GameResource {
 		Game game = gameManager.playCard(facebookUserId, gameId, sourceLayout, sourceCardId, destinationLayout, destinationCardId);
 		Player player = gameManager.selectPlayer(game, facebookUserId);
 		String ret = buildGameView(player, game);
-		LOGGER.debug("playCard: JSON returned for next phase: " + ret);
+//		LOGGER.debug("playCard: JSON returned for next phase: " + ret);
         return ret;
     }
 

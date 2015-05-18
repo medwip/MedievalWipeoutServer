@@ -360,10 +360,15 @@ public class GameManager {
 	public void activateSKills(Player player, Phase phase, SkillPhase skillPhase) throws PlayerNotInGameException, UnknownSkillException {
 
 		Player opponent = player.getGame().selectOpponent(player);
+		
+		List<Skill> skills = player.getSkills(phase, skillPhase);
+		LOGGER.info(String.format("activateSKills, phase=%s, skills=%s", phase, skills));
 
-		for (Skill skill : player.getSkills(phase, skillPhase)) {
+		for (Skill skill : skills) {
+			
+			LOGGER.info(String.format("Activing skill %s", skill.getSkillCode()));
 
-			if (skill.getSkillCode() == "ROBE") {
+			if ( skill.getSkillCode().equals("ROBE") ) {
 				opponent.removeGold(5);
 			}
 			else {
@@ -498,35 +503,27 @@ public class GameManager {
 					PlayerField playerField = player.getPlayerFieldAttack();
 					PlayerFieldCard sourceCard = playerField.getCards().get(sourceCardId);
 
+					// Card attacks the defense field
 					if (destinationLayout.equals("opponentFieldDefense")) {
+						
 						playerEvent.setDestination(new PlayerFieldCard(sourceCard));
 						playerEvent.setDestinationIndex(sourceCardId);
 						playerEvent.setEventType(EventType.ATTACK_DEFENSE_FIELD);
+						
 						if (opponent.getCurrentDefense() > sourceCard.getAttack()) {
-							opponent.removeCurrentDefense(sourceCard.getAttack());
-							GameEventIncreaseDecrease increaseDecreaseEvent = new GameEventIncreaseDecrease();
-							increaseDecreaseEvent.setPlayerType(PlayerType.OPPONENT);
-							increaseDecreaseEvent.setTarget(Target.PLAYER_CURRENT_DEFENSE);
-							increaseDecreaseEvent.setQuantity(sourceCard.getAttack());
-							player.getEvents().add(increaseDecreaseEvent);
-							// TODO: do it for opponent
+							
+							removeCurrentDefense(player, opponent, sourceCard.getAttack());
+							
 						} else {
-							opponent.removeLifePoints(sourceCard.getAttack() - opponent.getCurrentDefense());
-							opponent.setCurrentDefense(0);
-							GameEventIncreaseDecrease increaseDecreaseEventDefense = new GameEventIncreaseDecrease();
-							increaseDecreaseEventDefense.setPlayerType(PlayerType.OPPONENT);
-							increaseDecreaseEventDefense.setTarget(Target.PLAYER_CURRENT_DEFENSE);
-							increaseDecreaseEventDefense.setQuantity(sourceCard.getAttack());
-							player.getEvents().add(increaseDecreaseEventDefense);
-							GameEventIncreaseDecrease increaseDecreaseEventLifePoints = new GameEventIncreaseDecrease();
-							increaseDecreaseEventLifePoints.setPlayerType(PlayerType.OPPONENT);
-							increaseDecreaseEventLifePoints.setTarget(Target.PLAYER_LIFE_POINTS);
-							increaseDecreaseEventLifePoints.setQuantity(sourceCard.getAttack() - opponent.getCurrentDefense());
-							player.getEvents().add(increaseDecreaseEventLifePoints);
-							// TODO: do it for opponent
+							
+							removeCurrentDefense(player, opponent, opponent.getCurrentDefense());
+							removeLifePoints(player, opponent, sourceCard.getAttack() - opponent.getCurrentDefense());
+							
 						}
+					
 					}
 
+					// Card attacks another card
 					if (destinationLayout.startsWith("opponentCard")) {
 						PlayerFieldCard destinationCard = null;
 						playerEvent.setEventType(EventType.ATTACK_ATTACK_CARD);
@@ -585,6 +582,34 @@ public class GameManager {
 
 		return game;
 
+	}
+	
+	private void removeCurrentDefense(Player player, Player opponent, int value) {
+		
+		opponent.removeCurrentDefense(value);
+		GameEventIncreaseDecrease increaseDecreaseEvent = new GameEventIncreaseDecrease();
+		
+		// Event for defense
+		increaseDecreaseEvent.setPlayerType(PlayerType.OPPONENT);
+		increaseDecreaseEvent.setTarget(Target.PLAYER_CURRENT_DEFENSE);
+		increaseDecreaseEvent.setQuantity((-1) * value);
+		player.getEvents().add(increaseDecreaseEvent);
+		opponent.getEvents().add(increaseDecreaseEvent.duplicate());
+		
+	}
+
+	private void removeLifePoints(Player player, Player opponent, int value) {
+		
+		opponent.removeLifePoints(value);
+		GameEventIncreaseDecrease increaseDecreaseEventLifePoints = new GameEventIncreaseDecrease();
+		
+		// Event for life points
+		increaseDecreaseEventLifePoints.setPlayerType(PlayerType.OPPONENT);
+		increaseDecreaseEventLifePoints.setTarget(Target.PLAYER_LIFE_POINTS);
+		increaseDecreaseEventLifePoints.setQuantity((-1) * value);
+		player.getEvents().add(increaseDecreaseEventLifePoints);
+		opponent.getEvents().add(increaseDecreaseEventLifePoints.duplicate());
+		
 	}
 
 	public void deleteGame(long gameId) {

@@ -1,5 +1,6 @@
 package com.guntzergames.medievalwipeout.beans;
 
+
 public class GameEventIncreaseDecrease extends GameEvent {
 	
 	private int quantity;
@@ -24,6 +25,14 @@ public class GameEventIncreaseDecrease extends GameEvent {
 
 	public void setTarget(Target target) {
 		this.target = target;
+	}
+	
+	public GameEventIncreaseDecrease duplicate() {
+		GameEventIncreaseDecrease event = new GameEventIncreaseDecrease();
+		event.setPlayerType(getPlayerType() == PlayerType.PLAYER ? PlayerType.OPPONENT : PlayerType.PLAYER);
+		event.setQuantity(quantity);
+		event.setTarget(target);
+		return event;
 	}
 	
 }

@@ -52,6 +52,7 @@ public class DeckTemplateElement extends AbstractCard {
 		playerDeckCard.setName(getName());
 		playerDeckCard.setArcher(isArcher());
 		playerDeckCard.setDefensor(isDefensor());
+		playerDeckCard.setSkills(collectionElement.getCardModel().getSkills());
 		return playerDeckCard;
 	}
 	
