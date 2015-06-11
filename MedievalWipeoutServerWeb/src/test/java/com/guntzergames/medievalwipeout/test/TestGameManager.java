@@ -11,7 +11,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.guntzergames.medievalwipeout.managers.FooManager;
+import com.guntzergames.medievalwipeout.managers.TokenManager;
 
 @RunWith(Arquillian.class)
 public class TestGameManager {
@@ -21,7 +21,7 @@ public class TestGameManager {
 		System.out.println("yo");
 		JavaArchive archive = null;
 
-		archive = ShrinkWrap.create(JavaArchive.class).addClass(FooManager.class).addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
+		archive = ShrinkWrap.create(JavaArchive.class).addClass(TokenManager.class).addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
 
 		System.out.println("3");
 		return archive;

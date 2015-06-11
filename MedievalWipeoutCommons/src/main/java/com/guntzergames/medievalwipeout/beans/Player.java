@@ -74,6 +74,9 @@ public class Player {
 	private int faith;
 	@Transient
 	private int alchemy;
+	
+	@Transient
+	private Token token;
 
 	@JsonIgnore
 	public Account getAccount() {
@@ -271,6 +274,14 @@ public class Player {
 		this.events = events;
 	}
 
+	public Token getToken() {
+		return token;
+	}
+
+	public void setToken(Token token) {
+		this.token = token;
+	}
+
 	public List<Skill> getSkills(Phase phase, SkillPhase skillPhase) {
 		
 		List<Skill> skills = new ArrayList<Skill>();
@@ -307,6 +318,7 @@ public class Player {
 		setDefense(model.getDefense());
 		setCurrentDefense(model.getCurrentDefense());
 		setFaith(model.getFaith());
+		setToken(model.getToken());
 
 	}
 

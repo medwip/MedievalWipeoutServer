@@ -309,6 +309,8 @@ public class Game {
 		gameView.setDefense(defense);
 		gameView.setFaith(faith);
 		gameView.setAlchemy(alchemy);
+		
+		gameView.setToken(player.getToken());
 
 		return gameView;
 

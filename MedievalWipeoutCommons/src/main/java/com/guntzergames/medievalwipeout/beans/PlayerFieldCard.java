@@ -2,6 +2,8 @@ package com.guntzergames.medievalwipeout.beans;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+import com.guntzergames.medievalwipeout.beans.GameEvent.PlayerType;
+
 public class PlayerFieldCard extends PlayerDeckCard {
 	
 	private boolean played = false;
@@ -58,8 +60,17 @@ public class PlayerFieldCard extends PlayerDeckCard {
 	}
 	
 	@JsonIgnore
-	public String getField() {
-		return location == Location.DEFENSE ? "playerFieldDefense" : "playerFieldAttack";
+	public String getField(PlayerType playerType) {
+		
+		switch ( playerType ) {
+			case OPPONENT:
+				return location == Location.DEFENSE ? "opponentFieldDefense" : "opponentFieldAttack";
+			case PLAYER:
+				return location == Location.DEFENSE ? "playerFieldDefense" : "playerFieldAttack";
+			default:
+				return "";
+		}
+		
 	}
 	
 }

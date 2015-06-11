@@ -15,6 +15,7 @@ import com.guntzergames.medievalwipeout.beans.Player;
 import com.guntzergames.medievalwipeout.beans.PlayerField;
 import com.guntzergames.medievalwipeout.beans.PlayerHand;
 import com.guntzergames.medievalwipeout.beans.ResourceDeckCard;
+import com.guntzergames.medievalwipeout.beans.Token;
 import com.guntzergames.medievalwipeout.enums.GameState;
 import com.guntzergames.medievalwipeout.enums.Phase;
 
@@ -35,6 +36,8 @@ public class GameView {
 	
 	private Phase phase;
 	private GameState gameState;
+	
+	private Token token;
 	
 	public GameView() {
 		super();
@@ -174,6 +177,14 @@ public class GameView {
 
 	public void setActivePlayer(boolean activePlayer) {
 		this.activePlayer = activePlayer;
+	}
+
+	public Token getToken() {
+		return token;
+	}
+
+	public void setToken(Token token) {
+		this.token = token;
 	}
 
 	public static GameView fromJson(String json) {

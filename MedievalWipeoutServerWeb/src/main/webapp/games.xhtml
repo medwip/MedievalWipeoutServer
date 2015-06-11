@@ -19,6 +19,8 @@
 				value="Join with a Bot" />
 			<h:commandButton action="#{gameMB.clearGames()}"
 				value="Clear Games in Memory" />
+			<h:commandButton action="#{gameMB.clearPreviousGames()}"
+				value="Clear Previous Games in Memory" />
 			<br />
 
 			<h:dataTable value="#{gameMB.allGames}" var="game">
@@ -30,7 +32,7 @@
 				</h:column>
 				<h:column>
 					<f:facet name="header">
-						<h:outputText value="Sate" />
+						<h:outputText value="State" />
 					</f:facet>
 					<h:outputText value="#{game.gameState}" />
 				</h:column>
@@ -63,6 +65,22 @@
 				</h:column>
 
 			</h:dataTable>
+
+			<h:dataTable value="#{gameMB.tokens}" var="token">
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Uid" />
+					</f:facet>
+					<h:outputText value="#{token.uid}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Player" />
+					</f:facet>
+					<h:outputText value="#{token.player.id}" />
+				</h:column>
+			</h:dataTable>
+
 		</h:form>
 
 	</f:view>

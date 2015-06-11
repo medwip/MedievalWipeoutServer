@@ -475,6 +475,7 @@ public class GameManager {
 
 				// Play card from hand
 				if (destinationLayout.startsWith("playerField")) {
+					
 					PlayerField playerField = null;
 					PlayerHandCard card = hand.getCards().get(sourceCardId);
 					PlayerFieldCard fieldCard = new PlayerFieldCard(card);
@@ -495,6 +496,7 @@ public class GameManager {
 					playerField.addCard(fieldCard);
 					hand.getCards().remove((int) sourceCardId);
 					player.updatePlayableHandCards();
+				
 				}
 
 				// Play card from field
@@ -689,8 +691,6 @@ public class GameManager {
 
 	public Player selectPlayer(Game game, String facebookUserId) throws PlayerNotInGameException {
 
-		LOGGER.debug("game.getPlayers().get(0).getAccount() " + game.getPlayers().get(0).getAccount());
-		LOGGER.debug("game.getPlayers().get(0).getAccount().getFacebookUserId() " + game.getPlayers().get(0).getAccount().getFacebookUserId());
 		for (Player player : game.getPlayers()) {
 			if (player.getAccount().getFacebookUserId().equals(facebookUserId))
 				return player;
