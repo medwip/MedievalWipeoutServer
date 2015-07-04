@@ -14,6 +14,7 @@ import com.guntzergames.medievalwipeout.beans.DeckTemplate;
 import com.guntzergames.medievalwipeout.beans.Game;
 import com.guntzergames.medievalwipeout.beans.Player;
 import com.guntzergames.medievalwipeout.enums.GameState;
+import com.guntzergames.medievalwipeout.exceptions.JsonException;
 import com.guntzergames.medievalwipeout.singletons.GameSingleton;
 
 @Stateless
@@ -31,7 +32,12 @@ public class GameDao {
 
 	public Game saveGame(Game game) {
 
-		game.setDataDump(game.toJson());
+		try {
+			game.setDataDump(game.toJson());
+		}
+		catch ( JsonException e ) {
+			LOGGER.error("Error in JSON serializing while saving game dump", e);
+		}
 		Game mergedGame = mergeGame(game);
 		gameSingleton.addGame(mergedGame);
 		return mergedGame;

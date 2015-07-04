@@ -22,9 +22,11 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.map.ObjectMapper.DefaultTyping;
 
 import com.guntzergames.medievalwipeout.enums.GameState;
 import com.guntzergames.medievalwipeout.enums.Phase;
+import com.guntzergames.medievalwipeout.exceptions.JsonException;
 import com.guntzergames.medievalwipeout.exceptions.PlayerNotInGameException;
 import com.guntzergames.medievalwipeout.utils.JsonUtils;
 import com.guntzergames.medievalwipeout.views.GameView;
@@ -272,12 +274,12 @@ public class Game {
 		this.nextPhaseTimestamp = nextPhaseTimestamp;
 	}
 
-	public String toJson() {
-		return JsonUtils.toJson(this);
+	public String toJson() throws JsonException {
+		return JsonUtils.toJson(this, DefaultTyping.JAVA_LANG_OBJECT);
 	}
 	
-	public static Game fromJson(String json) {
-		return JsonUtils.fromJson(Game.class, json);
+	public static Game fromJson(String json) throws JsonException {
+		return JsonUtils.fromJson(Game.class, json, DefaultTyping.JAVA_LANG_OBJECT);
 	}
 
 	public GameView buildGameView(Player player) throws PlayerNotInGameException {

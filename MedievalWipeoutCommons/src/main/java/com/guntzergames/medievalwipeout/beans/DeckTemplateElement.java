@@ -49,6 +49,7 @@ public class DeckTemplateElement extends AbstractCard {
 		playerDeckCard.setFaithCost(getFaithCost());
 		playerDeckCard.setGoldCost(getGoldCost());
 		playerDeckCard.setLifePoints(getLifePoints());
+		playerDeckCard.setActualLifePoints(getLifePoints());
 		playerDeckCard.setName(getName());
 		playerDeckCard.setArcher(isArcher());
 		playerDeckCard.setDefensor(isDefensor());

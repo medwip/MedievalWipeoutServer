@@ -17,7 +17,10 @@ public class PlayerDeckCard extends AbstractCard {
 	protected String name;
 	
 	protected int attack;
+	
 	protected int lifePoints;
+	protected int actualLifePoints;
+	
 	protected int goldCost;
 	protected int faithCost;
 	protected int alchemyCost;
@@ -32,6 +35,7 @@ public class PlayerDeckCard extends AbstractCard {
 		this.name = name;
 		this.attack = attack;
 		this.lifePoints = lifePoints;
+		this.actualLifePoints = lifePoints;
 	}
 
 	public PlayerDeckCard() {
@@ -43,6 +47,7 @@ public class PlayerDeckCard extends AbstractCard {
 		this.drawableResourceName = model.getDrawableResourceName();
 		this.attack = model.getAttack();
 		this.lifePoints = model.getLifePoints();
+		this.actualLifePoints = model.getLifePoints();
 		this.name = model.getName();
 		this.goldCost = model.getGoldCost();
 		this.faithCost = model.getFaithCost();
@@ -57,6 +62,7 @@ public class PlayerDeckCard extends AbstractCard {
 		this.drawableResourceName = playerDeckCard.getDrawableResourceName();
 		this.attack = playerDeckCard.getAttack();
 		this.lifePoints = playerDeckCard.getLifePoints();
+		this.actualLifePoints = playerDeckCard.getActualLifePoints();
 		this.name = playerDeckCard.getName();
 		this.goldCost = playerDeckCard.getGoldCost();
 		this.faithCost = playerDeckCard.getFaithCost();
@@ -104,6 +110,14 @@ public class PlayerDeckCard extends AbstractCard {
 
 	public void setLifePoints(int lifePoints) {
 		this.lifePoints = lifePoints;
+	}
+
+	public int getActualLifePoints() {
+		return actualLifePoints;
+	}
+
+	public void setActualLifePoints(int actualLifePoints) {
+		this.actualLifePoints = actualLifePoints;
 	}
 
 	public int getGoldCost() {

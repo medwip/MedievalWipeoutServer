@@ -2,6 +2,9 @@ package com.guntzergames.medievalwipeout.beans;
 
 import java.util.List;
 
+import org.codehaus.jackson.map.ObjectMapper.DefaultTyping;
+
+import com.guntzergames.medievalwipeout.exceptions.JsonException;
 import com.guntzergames.medievalwipeout.utils.JsonUtils;
 import com.guntzergames.medievalwipeout.views.GameView;
 
@@ -25,8 +28,8 @@ public class GameViewList {
 		this.gameViews = gameViews;
 	}
 
-	public static GameViewList fromJson(String json) {
-		return JsonUtils.fromJson(GameViewList.class, json);
+	public static GameViewList fromJson(String json) throws JsonException {
+		return JsonUtils.fromJson(GameViewList.class, json, DefaultTyping.JAVA_LANG_OBJECT);
 	}
 
 }

@@ -18,7 +18,7 @@ public class PlayerFieldCard extends PlayerDeckCard {
 
 	public PlayerFieldCard(PlayerDeckCard playerDeckCard) {
 		super(playerDeckCard);
-		this.currentLifePoints = this.lifePoints;
+		this.currentLifePoints = this.actualLifePoints;
 		this.played = false;
 	}
 

@@ -15,6 +15,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.map.ObjectMapper.DefaultTyping;
+
+import com.guntzergames.medievalwipeout.exceptions.JsonException;
 import com.guntzergames.medievalwipeout.utils.JsonUtils;
 
 @Entity
@@ -85,12 +88,12 @@ public class Account {
 		this.deckTemplates = deckTemplates;
 	}
 
-	public static Account fromJson(String json) {
-		return JsonUtils.fromJson(Account.class, json);
+	public static Account fromJson(String json) throws JsonException {
+		return JsonUtils.fromJson(Account.class, json, DefaultTyping.JAVA_LANG_OBJECT);
 	}
 	
-	public String toJson() {
-		return JsonUtils.toJson(this);
+	public String toJson() throws JsonException {
+		return JsonUtils.toJson(this, DefaultTyping.JAVA_LANG_OBJECT);
 	}
 
 	@Override

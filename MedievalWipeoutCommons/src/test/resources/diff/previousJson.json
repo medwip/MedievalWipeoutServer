@@ -1,0 +1,236 @@
+{
+  "id" : 271,
+  "player" : {
+    "id" : 527,
+    "deckTemplate" : {
+      "id" : 7,
+      "deckLibel" : "Favorite",
+      "cards" : [ {
+        "@class" : "com.guntzergames.medievalwipeout.beans.DeckTemplateElement",
+        "id" : 34,
+        "collectionElement" : {
+          "id" : 74,
+          "drawableResourceName" : "semielf_archer",
+          "cardModel" : {
+            "id" : 6,
+            "drawableResourceName" : "semielf_archer",
+            "name" : "Semi-Elf Archer",
+            "attack" : 30,
+            "lifePoints" : 15,
+            "goldCost" : 15,
+            "faithCost" : 0,
+            "alchemyCost" : 0,
+            "defensor" : true,
+            "archer" : true,
+            "requiredLevel" : 1,
+            "skills" : [ ]
+          },
+          "name" : "Semi-Elf Archer",
+          "attack" : 30,
+          "lifePoints" : 15,
+          "goldCost" : 15,
+          "faithCost" : 0,
+          "alchemyCost" : 0,
+          "defensor" : true,
+          "archer" : true,
+          "numberOfCards" : 1
+        },
+        "numberOfCards" : 12
+      }, {
+        "@class" : "com.guntzergames.medievalwipeout.beans.DeckTemplateElement",
+        "id" : 41,
+        "collectionElement" : {
+          "id" : 76,
+          "drawableResourceName" : "exalted_zealot",
+          "cardModel" : {
+            "id" : 5,
+            "drawableResourceName" : "exalted_zealot",
+            "name" : "Exalted Zealot",
+            "attack" : 15,
+            "lifePoints" : 10,
+            "goldCost" : 5,
+            "faithCost" : 1,
+            "alchemyCost" : 0,
+            "defensor" : true,
+            "archer" : false,
+            "requiredLevel" : 1,
+            "skills" : [ {
+              "id" : 1,
+              "phase" : "AFTER_PLAY",
+              "skillPhase" : "PHASE_CHANGED",
+              "skillCode" : "ROBE"
+            } ]
+          },
+          "name" : "Exalted Zealot",
+          "attack" : 15,
+          "lifePoints" : 10,
+          "goldCost" : 5,
+          "faithCost" : 1,
+          "alchemyCost" : 0,
+          "defensor" : true,
+          "archer" : false,
+          "numberOfCards" : 6
+        },
+        "numberOfCards" : 16
+      }, {
+        "@class" : "com.guntzergames.medievalwipeout.beans.DeckTemplateElement",
+        "id" : 48,
+        "collectionElement" : {
+          "id" : 92,
+          "drawableResourceName" : "corrupted_monk",
+          "cardModel" : {
+            "id" : 8,
+            "drawableResourceName" : "corrupted_monk",
+            "name" : "Corrupted Monk",
+            "attack" : 10,
+            "lifePoints" : 20,
+            "goldCost" : 5,
+            "faithCost" : 0,
+            "alchemyCost" : 1,
+            "defensor" : true,
+            "archer" : false,
+            "requiredLevel" : 1,
+            "skills" : [ {
+              "id" : 1,
+              "phase" : "AFTER_PLAY",
+              "skillPhase" : "PHASE_CHANGED",
+              "skillCode" : "ROBE"
+            } ]
+          },
+          "name" : "Corrupted Monk",
+          "attack" : 10,
+          "lifePoints" : 20,
+          "goldCost" : 5,
+          "faithCost" : 0,
+          "alchemyCost" : 0,
+          "defensor" : true,
+          "archer" : false,
+          "numberOfCards" : 1
+        },
+        "numberOfCards" : 2
+      }, {
+        "@class" : "com.guntzergames.medievalwipeout.beans.DeckTemplateElement",
+        "id" : 51,
+        "collectionElement" : {
+          "id" : 95,
+          "drawableResourceName" : "orc_recruiter",
+          "cardModel" : {
+            "id" : 9,
+            "drawableResourceName" : "orc_recruiter",
+            "name" : "Ork Recruiter",
+            "attack" : 20,
+            "lifePoints" : 20,
+            "goldCost" : 10,
+            "faithCost" : 0,
+            "alchemyCost" : 0,
+            "defensor" : true,
+            "archer" : false,
+            "requiredLevel" : 1,
+            "skills" : [ ]
+          },
+          "name" : "Ork Recruiter",
+          "attack" : 20,
+          "lifePoints" : 20,
+          "goldCost" : 10,
+          "faithCost" : 0,
+          "alchemyCost" : 0,
+          "defensor" : true,
+          "archer" : false,
+          "numberOfCards" : 1
+        },
+        "numberOfCards" : 2
+      }, {
+        "@class" : "com.guntzergames.medievalwipeout.beans.DeckTemplateElement",
+        "id" : 54,
+        "collectionElement" : {
+          "id" : 99,
+          "drawableResourceName" : "orc_chaman",
+          "cardModel" : {
+            "id" : 10,
+            "drawableResourceName" : "orc_chaman",
+            "name" : "Ork Chaman",
+            "attack" : 25,
+            "lifePoints" : 50,
+            "goldCost" : 30,
+            "faithCost" : 1,
+            "alchemyCost" : 0,
+            "defensor" : true,
+            "archer" : true,
+            "requiredLevel" : 1,
+            "skills" : [ {
+              "id" : 1,
+              "phase" : "AFTER_PLAY",
+              "skillPhase" : "PHASE_CHANGED",
+              "skillCode" : "ROBE"
+            } ]
+          },
+          "name" : "Ork Chaman",
+          "attack" : 25,
+          "lifePoints" : 50,
+          "goldCost" : 30,
+          "faithCost" : 1,
+          "alchemyCost" : 0,
+          "defensor" : true,
+          "archer" : true,
+          "numberOfCards" : 1
+        },
+        "numberOfCards" : 12
+      } ]
+    },
+    "playerDeck" : {
+      "cards" : [ ]
+    },
+    "initialPlayerDeck" : {
+      "cards" : [ ]
+    },
+    "playerHand" : {
+      "cards" : [ ]
+    },
+    "playerFieldAttack" : {
+      "cards" : [ ]
+    },
+    "playerFieldDefense" : {
+      "cards" : [ ]
+    },
+    "playerDiscard" : {
+      "cards" : [ ]
+    },
+    "playerDeckCard1" : null,
+    "playerDeckCard2" : null,
+    "events" : [ ],
+    "lifePoints" : 0,
+    "trade" : 0,
+    "gold" : 0,
+    "defense" : 0,
+    "currentDefense" : 0,
+    "faith" : 0,
+    "alchemy" : 0,
+    "token" : {
+      "uid" : "527271"
+    }
+  },
+  "opponents" : [ ],
+  "activePlayer" : true,
+  "resourceCard1" : null,
+  "resourceCard2" : null,
+  "playerHand" : {
+    "cards" : [ ]
+  },
+  "playerFieldAttack" : {
+    "cards" : [ ]
+  },
+  "playerFieldDefense" : {
+    "cards" : [ ]
+  },
+  "gold" : 0,
+  "trade" : 0,
+  "defense" : 0,
+  "faith" : 0,
+  "alchemy" : 0,
+  "turn" : 0,
+  "phase" : null,
+  "gameState" : "WAITING_FOR_JOINER",
+  "token" : {
+    "uid" : "527271"
+  }
+}

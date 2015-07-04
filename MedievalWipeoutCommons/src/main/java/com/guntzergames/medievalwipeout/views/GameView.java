@@ -5,10 +5,10 @@ import java.io.IOException;
 import java.util.List;
 
 import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.ObjectMapper.DefaultTyping;
 import org.codehaus.jackson.map.SerializationConfig;
 
 import com.guntzergames.medievalwipeout.beans.Player;
@@ -18,6 +18,8 @@ import com.guntzergames.medievalwipeout.beans.ResourceDeckCard;
 import com.guntzergames.medievalwipeout.beans.Token;
 import com.guntzergames.medievalwipeout.enums.GameState;
 import com.guntzergames.medievalwipeout.enums.Phase;
+import com.guntzergames.medievalwipeout.exceptions.JsonException;
+import com.guntzergames.medievalwipeout.utils.JsonUtils;
 
 public class GameView {
 	
@@ -187,24 +189,8 @@ public class GameView {
 		this.token = token;
 	}
 
-	public static GameView fromJson(String json) {
-		
-		ObjectMapper mapper = new ObjectMapper();
-    	GameView gameView = null;
-    	try {
-			gameView = mapper.readValue(json, GameView.class);
-		} catch (JsonParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	return gameView;
-		
+	public static GameView fromJson(String json) throws JsonException {
+		return JsonUtils.fromJson(GameView.class, json, DefaultTyping.JAVA_LANG_OBJECT);
 	}
 	
 	public String toJson() {

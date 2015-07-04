@@ -2,7 +2,6 @@ package com.guntzergames.medievalwipeout.resources;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -12,22 +11,22 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
-import name.fraser.neil.plaintext.diff_match_patch;
-import name.fraser.neil.plaintext.diff_match_patch.Patch;
-
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import com.guntzergames.medievalwipeout.beans.DiffResult;
 import com.guntzergames.medievalwipeout.beans.Game;
 import com.guntzergames.medievalwipeout.beans.Player;
 import com.guntzergames.medievalwipeout.beans.Token;
 import com.guntzergames.medievalwipeout.exceptions.GameException;
+import com.guntzergames.medievalwipeout.exceptions.JsonException;
 import com.guntzergames.medievalwipeout.exceptions.PlayerNotInGameException;
 import com.guntzergames.medievalwipeout.managers.AccountManager;
 import com.guntzergames.medievalwipeout.managers.GameManager;
 import com.guntzergames.medievalwipeout.singletons.GameSingleton;
+import com.guntzergames.medievalwipeout.utils.DiffUtils;
 import com.guntzergames.medievalwipeout.views.GameView;
 
 @Stateless
@@ -107,6 +106,16 @@ public class GameResource {
 					LOGGER.info(String.format("Previous JSON and JSON are identical"));
 				} else {
 					
+					DiffResult diff = null;
+					
+					try {
+						diff = DiffUtils.compute(previousJson, json);
+//						LOGGER.info("previousJson:\n" + previousJson + "\n");
+//						LOGGER.info("json:\n" + json + "\n");
+					} catch (IOException e) {
+						LOGGER.error("Error while computing string difference in JSON", e);
+					}
+					
 					/*
 					diff_match_patch dmp = new diff_match_patch();
 					dmp.Match_Threshold = 0f;
@@ -119,18 +128,32 @@ public class GameResource {
 					LOGGER.info(String.format("results[0]: %s", results[0]));
 					*/
 					
-					ret = json;
+					// TODO: handle errors
+					if ( diff != null ) {
+						try {
+							ret = diff.toJson();
+						}
+						catch ( JsonException e ) {
+							LOGGER.error("Error in Json serialization (diff)", e);
+						}
+					}
+					else {
+						ret = "";
+					}
+					
 				}
 
 			} else {
+				LOGGER.info(String.format("Previous JSON is not set"));
 				ret = json;
 			}
 			gameSingleton.getPreviousGamesMap().put(token.getUid(), json);
 		} else {
 			ret = json;
 		}
-		LOGGER.debug("Token = " + token);
-		LOGGER.debug("getPreviousGamesMap = " + gameSingleton.getPreviousGamesMap());
+		LOGGER.debug(String.format("Token = %s, fullJson=%s", token, fullJson));
+		LOGGER.debug(String.format("ret = %s", ret));
+//		LOGGER.debug("getPreviousGamesMap = " + gameSingleton.getPreviousGamesMap());
 
 		LOGGER.debug("Perf Monitor: response ready to be sent");
 		
